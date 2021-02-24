@@ -1,0 +1,616 @@
+//====================================================================/
+//　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　/
+// artisoc                                                            /
+//                                                                    /
+//====================================================================/
+
+Version = 4.2;
+
+
+
+//-------------------------------------------------------
+// Component Tree
+//-------------------------------------------------------
+UNIVERSE {
+    Space ground(0,0),Square_2D(100, 100, Loop, North, 1, !Map_3D){
+        AgtType tree(0, 0)[0] {
+            Dim ID(0, 0) As Integer = (0);
+            Dim X(0, 0) As Double = (0.0);
+            Dim Y(0, 0) As Double = (0.0);
+            Dim Layer(0, 0) As Integer = (0);
+            Dim Direction(0, 0) As Double = (0.0);
+            Dim color(0, 0) <8>  As Integer = (0);
+            Dim age(0, 0) As Integer = ();
+        }
+    }
+    Dim count(0, 0) As Integer = (0);
+    Dim trend_age(0, 0) As Integer = ();
+    Dim degree(0, 0) As Integer = ();
+    Dim popular(0, 0) As Integer = ();
+    Dim influencer(0, 0) As Integer = ();
+}
+
+
+//-------------------------------------------------------
+// Agent Variable Initial Data
+//-------------------------------------------------------
+Initial_Value {
+    UNIVERSE.TREND_AGE = 1(5);
+    UNIVERSE.DEGREE = 1(1);
+    UNIVERSE.POPULAR = 1(77);
+    UNIVERSE.INFLUENCER = 1(1);
+}
+
+
+//-------------------------------------------------------
+// Agent Rule
+//-------------------------------------------------------
+#begin_rule UNIVERSE
+Univ_Init{
+	Dim i As Integer
+	Dim j As Integer
+	Dim myAgt As Agt
+	Dim myAgtSet As AgtSet
+	Dot_print(62,97,93,70,5)//北海道
+	Dot_print(62,68,83,47,3)//東北
+	Dot_print(34,47,83,36,2)//本州北の過疎
+	Dot_print(62,36,83,24,10)//関東
+	Dot_print(34,36,62,24,7)//本州南西
+	Dot_print(34,22,52,4,2)//四国
+	Dot_print(10,47,32,4,5)//九州
+
+
+	MakeAgtSet(myAgtSet,Universe.ground.tree)
+	//RandomPutAgtSetCell(myAgtSet,False)
+
+
+	//myAgt = getAgt(myAgtSet,CInt(Rnd() * CountAgtSet(myAgtSet)))
+	//myAgt.color = COLOR_PINK
+	
+	myAgt = CreateAgt(Universe.ground.tree)
+			myAgt.color = COLOR_RED
+			myAgt.age = 2
+			myAgt.x = 75
+			myAgt.y = 35
+}
+
+Sub Dot_print(ax As Integer, ay As Integer, cx As Integer, cy As Integer, age As integer)
+{
+	Dim myAgt As Agt
+	Dim myAgtSet As AgtSet
+	Dim i As Integer
+	Dim j As Integer
+	
+	For i = ax To cx
+		For j = cy To ay
+		
+			myAgt = CreateAgt(Universe.ground.tree)
+			myAgt.color = COLOR_GREEN
+			myAgt.age = age
+			myAgt.x = i
+			myAgt.y = j
+		Next j
+	Next i
+}
+
+Univ_Step_Begin{
+	Dim myAgt As Agt
+	Dim myAgtSet As AgtSet
+	if getCountStep() == 20 Then
+	myAgt = CreateAgt(Universe.ground.tree)
+			myAgt.color = COLOR_RED
+			myAgt.x = 55
+			myAgt.y = 30
+			end if
+
+			//北海道
+			if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 3) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 62 + Cint(Rnd()*31)
+								myAgt.y = 97 -  Cint(Rnd()*27)
+		end if
+
+		//札幌
+		if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 10) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 68 + Cint(Rnd()*8)
+								myAgt.y = 83 -  Cint(Rnd()*7)
+		end if
+								
+
+ 		//東北
+			if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 3) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 62 + Cint(Rnd()*21)
+								myAgt.y = 68 -  Cint(Rnd()*21)
+		end if
+
+		//仙台
+			if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 10) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 76 + Cint(Rnd()*7)
+								myAgt.y = 57 -  Cint(Rnd()*9)
+		end if
+
+		//本州北
+		if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 2) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 34 + Cint(Rnd()*49)
+								myAgt.y = 47 -  Cint(Rnd()*11)
+		end if
+
+　//本州南西
+		if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 8) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 34 + Cint(Rnd()*28)
+								myAgt.y = 36 -  Cint(Rnd()*12)
+		end if
+
+		//九州
+		if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 5) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 10 + Cint(Rnd()*21)
+								myAgt.y = 47 -  Cint(Rnd()*43)
+		end if
+
+		//博多
+		if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 10) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 21 + Cint(Rnd()*11)
+								myAgt.y = 47 -  Cint(Rnd()*12)
+		end if
+
+				//四国
+		if getCountStep() == 20 + 15*abs(universe.trend_age*2 - 2) Then
+			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 34 + Cint(Rnd()*18)
+								myAgt.y = 20 -  Cint(Rnd()*16)
+		end if
+
+		if Universe.influencer == 1 Then
+			if  getCountStep() == 27 Then
+
+			MakeAgtSet(myAgtSet,Universe.ground.tree)
+			
+				myAgt = getAgt(myAgtSet,CInt(Rnd() * CountAgtSet(myAgtSet)))
+				myAgt.color = COLOR_MAZENTA
+			end if
+		end if
+	/*		
+					 if Universe.trend_age == 5 Then
+					 			myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 34 + Cint(Rnd()*18)
+								myAgt.y = 20 -  Cint(Rnd()*16)
+								end if
+					 if Universe.trend_age == 4 Then
+ 								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 62 + Cint(Rnd()*31)
+								myAgt.y = 97 -  Cint(Rnd()*27)
+								
+								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 62 + Cint(Rnd()*21)
+								myAgt.y = 68 -  Cint(Rnd()*21)
+
+								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 34 + Cint(Rnd()*49)
+								myAgt.y = 47 -  Cint(Rnd()*11)
+						end if
+
+						if Universe.trend_age == 3 Then
+ 								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 62 + Cint(Rnd()*31)
+								myAgt.y = 97 -  Cint(Rnd()*27)
+								
+								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 10 + Cint(Rnd()*21)
+								myAgt.y = 47 -  Cint(Rnd()*43)
+	
+						end if
+						if Universe.trend_age == 2 Then
+ 								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 62 + Cint(Rnd()*31)
+								myAgt.y = 97 -  Cint(Rnd()*27)
+								
+								myAgt = CreateAgt(Universe.ground.tree)
+ 								myAgt.color = COLOR_RED
+								myAgt.x = 10 + Cint(Rnd()*21)
+								myAgt.y = 47 -  Cint(Rnd()*43)
+
+								
+						end if
+			//end if
+	*/
+}
+
+Univ_Step_End{
+	Dim myAgtSet As AgtSet
+	Dim myAgt As Agt
+	Dim ctRed As Integer
+	Dim ctBlue As Integer
+	Dim ct As Integer
+
+	ctRed = 0
+	ctBlue = 0
+	ct = 0
+	MakeAgtSet(myAgtSet, Universe.Ground.tree)
+	For Each myAgt In myAgtSet
+		ct = ct +1
+		if myAgt.color == COLOR_RED Then
+		 ctRed = ctRed +1
+		End If
+		if myAgt.color == COLOR_BLUE Then
+		 ctBlue = ctBlue +1
+		End If
+	Next myAgt
+	//finish condition
+	If getCountStep() == 150 Then
+		PrintLn("finish! : RED  =" & ctRed)
+		PrintLn("finish! : BLUE  =" & ctBlue)
+		PrintLn("finish! : Total  =" & ctRed + ctBlue)
+		ExitSimulation()
+		End If
+}
+
+Univ_Finish{
+
+}
+#end_rule UNIVERSE
+
+
+
+
+//-------------------------------------------------------
+// Agent Rule
+//-------------------------------------------------------
+#begin_rule UNIVERSE.GROUND.TREE
+Agt_Init{
+
+}
+
+Agt_Step{
+	Dim myAgtSet As AgtSet
+	Dim myAgt As Agt
+	Dim ct As Integer
+	Dim i As Integer
+
+	//My.trend_age = Universe.trend_age
+
+	If My.color == COLOR_RED Then
+		MakeALLAgtSetAroundOwnCell(myAgtSet,2,False)
+		ct = CountAgtSet(myAgtSet)
+		If ct > 0 Then
+
+			myAgt = GetAgt(MyAgtSet,CInt(Rnd()*ct))
+			If myAgt.color == COLOR_GREEN Then
+			 For i = 0 To Rnd()*Universe.degree / 5
+				if Cint(Rnd()*200) <= 100/(1+(12-myAgt.age))  then
+				myAgt.color = COLOR_RED
+				End if
+				Next i
+			End If
+		End If
+	End If
+
+	If My.color == COLOR_MAZENTA Then
+		MakeALLAgtSetAroundOwnCell(myAgtSet,1,False)
+		ct = CountAgtSet(myAgtSet)
+		If ct > 0 Then
+		For i = 0 To ct  - 1
+			myAgt = GetAgt(MyAgtSet,i)
+				myAgt.color = COLOR_BLUE
+				Next i
+		End If
+	End If
+
+		If My.color == COLOR_BLUE Then
+		MakeALLAgtSetAroundOwnCell(myAgtSet,2,False)
+		ct = CountAgtSet(myAgtSet)
+		If ct > 0 Then
+
+			myAgt = GetAgt(MyAgtSet,CInt(Rnd()*ct))
+			If myAgt.color == COLOR_GREEN Or  myAgt.color == COLOR_RED Then
+				if Cint(Rnd()*1000) <= Universe.popular  then
+				myAgt.color = COLOR_BLUE
+				End if
+			End If
+		End If
+	End If
+	/*
+	If GetHistory(My.color,8) == COLOR_RED Then
+		My.color = COLOR_BLACK
+	End If
+	*/
+}
+#end_rule UNIVERSE.GROUND.TREE
+
+
+
+
+//-------------------------------------------------------
+// Simulation Definition Division
+//-------------------------------------------------------
+Single_Simulation {
+    Step_Max = 0;
+    Time_Max = 0;
+    End_Condition = "";
+    Exec_Wait = 0;
+    Exec_Wait_Max = 0;
+    Random_Generator = Java_Standard;
+    Exec_Order = Random;
+    Exec_Order_Random_First_Step_Only = No;
+    Random_Seed = 0;
+    Redraw_Timing = Step;
+    Redraw_Interval = 1;
+    Garbage_Interval = 0;
+}
+
+
+//-------------------------------------------------------
+// Simulation Loop Definition Division
+//-------------------------------------------------------
+Repeat_Simulation {
+    Value_Change = None;
+    Initial_Value_Change_None {
+        Repeat_Max = 1;
+    }
+}
+
+
+//-------------------------------------------------------
+// 2 Dimension Map Display Definition Division
+//-------------------------------------------------------
+Map_Output {
+    Map_Space_Name = "Universe.ground";
+    Map_Name = "ground";
+    Title = "";
+    Disable = No;
+    Background_Color = 255, 255, 255;
+    Position_x = 180;
+    Position_y = 0;
+    Size_x = 1043;
+    Size_y = 875;
+    Map_Cell_Size = 4;
+    Remarks = Yes;
+    Legend_Pos = Top;
+    Font_Name = "Dialog";
+    Font_Char_Set = 81;
+    Font_Size = 12.0;
+    Font_Style = 0;
+    Font_Color = 0, 0, 0;
+    Font_Background_Color = 255, 255, 255;
+    FastDraw = Yes;
+    Draw_Timing = Simulation_Step;
+    Draw_Interval = 1;
+    Axis_Label = "", "";
+    Draw_Range = 0, 0, 100, 100;
+    Ruled_Line = No;
+    Text_Display = No;
+    Text_Display_Variable_Name = "";
+    Chess_Type_Display_Position = No;
+    Background_Transparent = No;
+    Target_Layer = 0;
+    Coordinate_Display = No;
+    Space_Kind = Square_2D;
+    BG_Pict = No;
+    BG_Type = 0;
+    BG_Var_Name = "";
+    BG_File_Name = "";
+    Origin_Position = 2;
+    Output_Group_Name = "";
+    Output {
+        Map_Element_Name = "trend";
+        Map_Element = Agent_Variable;
+        Output_Expression = "Universe.ground.tree";
+        Draw_Line = No;
+        Collection_Name = "";
+        Line_Type = 0;
+        Line_Arrow = 0;
+        Line_Width = 0;
+        Line_Color = 0, 0, 0;
+        Line_Type_Variable = "";
+        Line_Arrow_Variable = "";
+        Line_Width_Variable = "";
+        Line_Color_Variable = "";
+        Agent_Color = "Universe.ground.tree.color";
+        Marker_Id = 1;
+        Effective_Figures = 0;
+        Format_Id = 0;
+        Agent_Image_Direction = No;
+        Icon_Type = 0;
+        Icon_Var_Name = "";
+        Icon_Transparent = No;
+        Icon_Enlarg_Reduce = No;
+        Icon_File_Name = "";
+        Num_Display = No;
+        Num_Var_Name = "";
+        Agent_Image_Magnify_by_value = Yes;
+        Agent_Image_Magnify_Value = 1.0;
+        Agent_Image_Magnify_Variable_Name = "Universe.ground.tree.ID";
+        Agent_Image_Transparency_by_value = Yes;
+        Agent_Image_Transparency_Value = 0.0;
+        Agent_Image_Transparency_Variable_Name = "Universe.ground.tree.ID";
+    }
+}
+
+
+//-------------------------------------------------------
+// Control Panel Definition Division
+//-------------------------------------------------------
+Control_Panel {
+    Display_Area = 899, 300, 546, 145;
+    Display_Type = 0;
+    Panel_Item {
+        Item_Type = Slider;
+        Item_Name = "trend_age";
+        Display_Area = 0, 0, 0, 0;
+        Font_Name = "";
+        Font_Char_Set = 0;
+        Font_Size = 0.0;
+        Font_Style = 0;
+        Font_Color = 0, 0, 0;
+        Font_Background_Color = 0, 0, 0;
+        Var_Name = "Universe.trend_age";
+        Slider_Range_Max = 4;
+        Slider_Value_Min = 1.0;
+        Slider_Value_Step = 1.0;
+        Slider_Value = "4";
+    }
+    Panel_Item {
+        Item_Type = Slider;
+        Item_Name = "degree";
+        Display_Area = 0, 0, 0, 0;
+        Font_Name = "";
+        Font_Char_Set = 0;
+        Font_Size = 0.0;
+        Font_Style = 0;
+        Font_Color = 0, 0, 0;
+        Font_Background_Color = 0, 0, 0;
+        Var_Name = "Universe.degree";
+        Slider_Range_Max = 9;
+        Slider_Value_Min = 1.0;
+        Slider_Value_Step = 1.0;
+        Slider_Value = "0";
+    }
+    Panel_Item {
+        Item_Type = Slider;
+        Item_Name = "popular";
+        Display_Area = 0, 0, 0, 0;
+        Font_Name = "";
+        Font_Char_Set = 0;
+        Font_Size = 0.0;
+        Font_Style = 0;
+        Font_Color = 0, 0, 0;
+        Font_Background_Color = 0, 0, 0;
+        Var_Name = "Universe.popular";
+        Slider_Range_Max = 100;
+        Slider_Value_Min = 0.0;
+        Slider_Value_Step = 1.0;
+        Slider_Value = "77";
+    }
+    Panel_Item {
+        Item_Type = Slider;
+        Item_Name = "influencer";
+        Display_Area = 0, 0, 0, 0;
+        Font_Name = "";
+        Font_Char_Set = 0;
+        Font_Size = 0.0;
+        Font_Style = 0;
+        Font_Color = 0, 0, 0;
+        Font_Background_Color = 0, 0, 0;
+        Var_Name = "Universe.influencer";
+        Slider_Range_Max = 1;
+        Slider_Value_Min = 0.0;
+        Slider_Value_Step = 1.0;
+        Slider_Value = "1";
+    }
+}
+
+
+//-------------------------------------------------------
+// Space Initial Value Definition Divsion
+//-------------------------------------------------------
+Space_Initial {
+}
+
+
+//-------------------------------------------------------
+// Other Miscellaneous Data Definition Division
+//-------------------------------------------------------
+Others_Data {
+    Indent = 4;
+    Rule_Colored = Yes;
+    Rule_LineNo = Yes;
+    Window_Hide_Run = 1;
+    Debug_Position_x = 75;
+    Debug_Position_y = 75;
+    Debug_Size_x = 400;
+    Debug_Size_y = 200;
+    Console_Position_x = 696;
+    Console_Position_y = 750;
+    Console_Size_x = 579;
+    Console_Size_y = 176;
+    Componen_Tree_Position_x = 2;
+    Componen_Tree_Position_y = 2;
+    Componen_Tree_Size_x = 250;
+    Componen_Tree_Size_y = 400;
+    Console_Background_Color = 16777215;
+    Console_Foreground_Color = 255;
+    Console_DisplayLines_Max = 500;
+    plug_in_module_name = "";
+    Font_Name = "Dialog";
+    Font_Char_Set = 0;
+    Font_Size = 14.0;
+    Font_Style = 0;
+    Font_Color = 0, 0, 0;
+    Font_Background_Color = 0, 0, 0;
+}
+
+
+//-------------------------------------------------------
+// Network Information Definition Division
+//-------------------------------------------------------
+Network_Info {
+    Global_Space_Area = 0, 0, 100, 100;
+    Local_Space_Info {
+    }
+}
+
+
+//-------------------------------------------------------
+// Window Location Definition Division
+//-------------------------------------------------------
+Window_Rectangle {
+    Window_Name = Main_Window, 714, 123, 800, 700;
+    Window_Name = Output_Setting_Window, 743, 353, 480, 350;
+    Window_Name = Artisoc_Help_Window, 10, 10, 400, 300;
+}
+
+
+//-------------------------------------------------------
+// Help Favorite Division
+//-------------------------------------------------------
+Help_Favorite {
+}
+
+
+//-------------------------------------------------------
+// Model Description Division
+//-------------------------------------------------------
+Model_Description {
+    Universe {
+        Function Univ_Init {
+        }
+        Function Dot_print {
+        }
+        Function Univ_Step_Begin {
+        }
+        Function Univ_Step_End {
+        }
+        Function Univ_Finish {
+        }
+    }
+    Space Universe.ground {
+    }
+    Agent Universe.ground.tree {
+        Function Agt_Init {
+        }
+        Function Agt_Step {
+        }
+    }
+}
